@@ -28,17 +28,24 @@ jobs:
             --destination=ghcr.io/$GITHUB_REPOSITORY:$GITHUB_SHA \
             --no-push --tar-path image.tar
 
-
       - name: debug
         run: |
           ls -la .
-          docker image load --input image.tar.gz
+          docker image load --input image.tar
           docker image list
+
+      - name: install crane
+        run: |
+          curl -L -o crane.tar.gz https://github.com/google/go-containerregistry/releases/download/v0.19.1/go-containerregistry_Linux_x86_64.tar.gz
+          tar -xvf crane.tar.gz
+          cp crane /usr/local/bin/
+          crane version
 
       - name: push
         if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'master'
         run: |
-          docker image load --input image.tar.gz
+          ls -la .
+
 
 
 #             docker image load --input image.tar.gz # this will output the original image name
