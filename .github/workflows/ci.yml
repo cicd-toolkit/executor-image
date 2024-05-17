@@ -21,11 +21,10 @@ jobs:
       - name: build
         run: |
           docker run \
-          --interactive -v $(pwd):/workspace gcr.io/kaniko-project/executor:latest \
-          --context . --dockerfile ./Dockerfile \
-          -cache=true --cache-repo $GITHUB_REPOSITORY \
-          --destination=ghcr.io/$GITHUB_REPOSITORY:$GITHUB_SHA \
-          --no-push --tar-path image.tar
+            --interactive -v $(pwd):/workspace gcr.io/kaniko-project/executor:latest \
+            --context . --dockerfile ./Dockerfile \
+            --destination=ghcr.io/$GITHUB_REPOSITORY:$GITHUB_SHA \
+            --no-push --tar-path image.tar
 
 
 
