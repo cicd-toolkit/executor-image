@@ -26,7 +26,14 @@ jobs:
             --destination=ghcr.io/$GITHUB_REPOSITORY:$GITHUB_SHA \
             --no-push --tar-path image.tar
 
+      - name: push
+        run: |
+          ls -la .
 
+
+#             docker image load --input image.tar.gz # this will output the original image name
+# docker image tag original-registry.example.org/original-image-name:0.0.1 new-registry.example.com/new-image-name:0.0.1
+# docker push new-registry.example.com/new-image-name
 
       # - name: Login to Github Packages
       #   uses: docker/login-action@v1

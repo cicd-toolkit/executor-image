@@ -40,7 +40,7 @@ RUN apt-get update \
 # Install AWS CLI
 ARG AWSCLI_URL=https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWSCLI_VERSION}.zip
 RUN curl -o /tmp/awscli.zip ${AWSCLI_URL} \
-    && unzip -d /tmp /tmp/awscli.zip \
+    && unzip -qq -d /tmp /tmp/awscli.zip \
     && /tmp/aws/install \
     && rm -rf /tmp/aws*
 
