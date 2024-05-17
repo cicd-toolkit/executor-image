@@ -37,8 +37,10 @@ jobs:
 
       - name: release
         if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'master'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo ${{secrets.GITHUB_TOKEN}} | docker login ghcr.io -u ${{github.actor}} --password-stdin
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           docker image tag ghcr.io/$GITHUB_REPOSITORY:$GITHUB_SHA ghcr.io/$GITHUB_REPOSITORY:$IMAGEVERSION
           docker push ghcr.io/$GITHUB_REPOSITORY:$IMAGEVERSION
 
