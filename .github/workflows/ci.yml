@@ -1,0 +1,51 @@
+name: 'pr'
+
+on:
+  pull_request:
+    branches:
+      - master
+    types: [opened, synchronize, closed]
+
+permissions:
+  id-token: write
+  packages: write
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "checkout"
+        uses: actions/checkout@v4
+
+      - name: validate
+        run: |
+          .github/scripts/validate.sh
+
+      - name: build
+        run: |
+          docker build -t ghcr.io/$GITHUB_REPOSITORY:$GITHUB_SHA .
+          docker image list | grep $GITHUB_REPOSITORY
+
+      - name: debug
+        run: |
+          ls -lah .
+
+      - name: release
+        if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'master'
+        run: |
+          echo ${{secrets.GITHUB_TOKEN}} | docker login ghcr.io -u ${{github.actor}} --password-stdin
+          docker image tag $GITHUB_REPOSITORY:$GITHUB_SHA $GITHUB_REPOSITORY:$IMAGEVERSION
+          docker push $GITHUB_REPOSITORY:$IMAGEVERSION
+
+          set -e; awk 'NR==2 {print RT,$0}' RS="## [v|0-9]" OFS="" CHANGELOG.md > release_description.md
+          cat release_description.md
+          echo $IMAGEVERSION
+
+          gh release create $IMAGEVERSION -F release_description.md -t $IMAGEVERSION
+
+
