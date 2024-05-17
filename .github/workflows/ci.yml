@@ -2,7 +2,9 @@ name: 'pr'
 
 on:
   pull_request:
-
+    branches:
+      - master
+    types: [opened, synchronize, closed]
 
 permissions:
   packages: write
@@ -26,9 +28,17 @@ jobs:
             --destination=ghcr.io/$GITHUB_REPOSITORY:$GITHUB_SHA \
             --no-push --tar-path image.tar
 
-      - name: push
+
+      - name: debug
         run: |
           ls -la .
+          docker image load --input image.tar.gz
+          docker image list
+
+      - name: push
+        if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'master'
+        run: |
+          docker image load --input image.tar.gz
 
 
 #             docker image load --input image.tar.gz # this will output the original image name
