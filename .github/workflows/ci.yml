@@ -6,8 +6,6 @@ on:
 jobs:
   validate:
     runs-on: ubuntu-latest
-    container:
-      image: gcr.io/kaniko-project/executor:debug
     steps:
       - name: "checkout"
         uses: actions/checkout@v4
@@ -18,7 +16,11 @@ jobs:
 
       - name: build
         run: |
-          /kaniko/executor --context . --dockerfile ./Dockerfile --cache=true --cache-repo $GITHUB_REPOSITORY --destination $GITHUB_REPOSITORY:$GITHUB_SHA
+          docker run \
+          --interactive -v $(pwd):/workspace gcr.io/kaniko-project/executor:latest \
+          --context . --dockerfile ./Dockerfile \
+          -cache=true --cache-repo $GITHUB_REPOSITORY \
+          --destination=ghcr.io/$GITHUB_REPOSITORY:$GITHUB_SHA
 
 
 
