@@ -25,3 +25,4 @@ if git show-ref --tags | grep -q "refs/tags/$CHANGELOG_VERSION"; then
 fi
 
 echo "Version $CHANGELOG_VERSION successfully validated"
+echo "IMAGEVERSION=$CHANGELOG_VERSION" >> $GITHUB_ENV
