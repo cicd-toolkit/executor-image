@@ -1,0 +1,24 @@
+name: 'pr'
+
+on:
+  pull_request:
+
+jobs:
+  pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "checkout"
+        uses: actions/checkout@v4
+
+      - name: validate
+        run: |
+          .github/scripts/validate.sh
+
+      # - name: Login to Github Packages
+      #   uses: docker/login-action@v1
+      #   with:
+      #     registry: ghcr.io
+      #     username: ${GITHUB_ACTOR}
+      #     password: ${{ secrets.PAT }}
+
+
