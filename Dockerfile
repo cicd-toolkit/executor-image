@@ -68,11 +68,11 @@ RUN mkdir /tmp/occli \
     && mv /tmp/occli/oc /usr/local/oc \
     && rm -rf /tmp/occli*
 
-# Install Azure CLI
-RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.asc.gpg \
-    && echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $(lsb_release -cs) main" > /etc/apt/sources.list.d/azure-cli.list \
-    && apt-get update \
-    && apt-get install -y azure-cli
+# # Install Azure CLI
+# RUN curl -sL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor > /etc/apt/trusted.gpg.d/microsoft.asc.gpg \
+#     && echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ $(lsb_release -cs) main" > /etc/apt/sources.list.d/azure-cli.list \
+#     && apt-get update \
+#     && apt-get install -y azure-cli
 
 # Install Terraform
 ARG TERRAFORM_URL=https://releases.hashicorp.com/terraform/${TERRAFORM_VERSION}/terraform_${TERRAFORM_VERSION}_linux_amd64.zip
@@ -132,13 +132,6 @@ RUN mkdir /tmp/gh \
     && chmod 0755 /usr/local/bin/gh \
     && rm -rf /tmp/gh*
 
-# Install Google Cloud CLI
-ARG GCLOUD_FILE=google-cloud-cli-${GCLOUD_CLI_VERSION}-linux-x86_64.tar.gz
-ARG GCLOUD_CLI_URL=https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${GCLOUD_FILE}
-RUN curl -O ${GCLOUD_CLI_URL} \
-    && tar -xf ${GCLOUD_FILE} \
-    && mv /google-cloud-sdk /opt
-ENV PATH=$PATH:/opt/google-cloud-sdk/bin
 
 # Cleanup the image
 RUN apt-get clean \
