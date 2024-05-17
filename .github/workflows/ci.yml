@@ -39,8 +39,8 @@ jobs:
         if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'master'
         run: |
           echo ${{secrets.GITHUB_TOKEN}} | docker login ghcr.io -u ${{github.actor}} --password-stdin
-          docker image tag $GITHUB_REPOSITORY:$GITHUB_SHA $GITHUB_REPOSITORY:$IMAGEVERSION
-          docker push $GITHUB_REPOSITORY:$IMAGEVERSION
+          docker image tag ghcr.io/$GITHUB_REPOSITORY:$GITHUB_SHA ghcr.io/$GITHUB_REPOSITORY:$IMAGEVERSION
+          docker push ghcr.io/$GITHUB_REPOSITORY:$IMAGEVERSION
 
           set -e; awk 'NR==2 {print RT,$0}' RS="## [v|0-9]" OFS="" CHANGELOG.md > release_description.md
           cat release_description.md
