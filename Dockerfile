@@ -22,20 +22,16 @@ ARG GCLOUD_CLI_VERSION=459.0.0
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-    software-properties-common \
     curl \
     unzip \
-    dirmngr \
     ca-certificates \
     apt-transport-https \
     lsb-release \
-    gnupg \
     jq \
     git \
     gawk \
     patch \
-    tree \
-    gettext-base
+    tree
 
 # Install AWS CLI
 ARG AWSCLI_URL=https://awscli.amazonaws.com/awscli-exe-linux-x86_64-${AWSCLI_VERSION}.zip
