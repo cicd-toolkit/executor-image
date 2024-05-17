@@ -35,17 +35,23 @@ jobs:
           ls -lah .
 
       - name: 'Login to GitHub Container Registry'
-        uses: docker/login-action@v1
+        uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{github.actor}}
           password: ${{secrets.GITHUB_TOKEN}}
 
-      - name: push
+      - name: release
         if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'master'
         run: |
           docker image load --input image.tar
           docker image tag $GITHUB_REPOSITORY:$GITHUB_SHA $GITHUB_REPOSITORY:$IMAGEVERSION
           docker push $GITHUB_REPOSITORY:$IMAGEVERSION
+
+          set -e; awk 'NR==2 {print RT,$0}' RS="## [v|0-9]" OFS="" CHANGELOG.md > release_description.md
+          cat release_description.md
+          echo $IMAGEVERSION
+
+          gh release create $IMAGEVERSION -F release_description.md -t $IMAGEVERSION
 
 
