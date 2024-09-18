@@ -3,6 +3,10 @@
 All notable changes are documented in this file
 
 
+## 0.0.4
+
+- update tf 1.4.7
+
 ## 0.0.3
 
 - update helm to 3.15.4
